@@ -1,0 +1,46 @@
+{
+  "name": "gwanggo-mcp",
+  "version": "0.1.0",
+  "description": "MCP server + CLI for the Gwanggo AI media generation API — give Claude, Cursor, and Codex the power to generate images & video with one key.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "gwanggo-mcp": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build",
+    "dev": "tsc --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bill-950207/gwanggo-mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "image-generation",
+    "video-generation",
+    "claude",
+    "cursor",
+    "agent",
+    "gwanggo"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}
