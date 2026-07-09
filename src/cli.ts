@@ -30,8 +30,9 @@ function arg(flags: string[], name: string): string | undefined {
 
 async function cmdLogin(): Promise<void> {
   const dc = await startDeviceFlow()
-  console.log(`\n브라우저에서 승인해주세요: ${dc.verification_uri_complete}`)
-  console.log(`(코드: ${dc.user_code})\n`)
+  console.log(`\n브라우저에서 gwanggo CLI 연결을 승인해주세요:`)
+  console.log(`${dc.verification_uri_complete}`)
+  console.log(`브라우저가 열리지 않으면 위 URL을 복사해 여세요. 요청 코드: ${dc.user_code}\n`)
   openBrowser(dc.verification_uri_complete)
   const token = await pollDeviceToken(dc.device_code, dc.interval, dc.expires_in)
   const path = saveKey(token)
