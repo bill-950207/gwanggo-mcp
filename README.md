@@ -27,6 +27,8 @@ Agent: [calls generate_image with seedream-5] → https://…/result.png
 
 ```bash
 npx gwanggo-mcp login
+# or, after install:
+gwanggo auth login
 ```
 
 > New accounts get free credits: sign up at [gwanggo.jocoding.io](https://gwanggo.jocoding.io?utm_source=github&utm_medium=mcp-readme). You can also skip `login` and set `GWANGGO_API_KEY` (create one at **Dashboard → API keys**).

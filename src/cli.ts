@@ -4,6 +4,7 @@
  *
  *   gwanggo-mcp               MCP 서버 (stdio) — Claude/Cursor/Codex 설정에서 사용
  *   gwanggo-mcp login         브라우저 승인으로 API 키 발급/저장 (device flow)
+ *   gwanggo auth login        브라우저 승인으로 API 키 발급/저장 (alias)
  *   gwanggo-mcp logout        저장된 키 삭제
  *   gwanggo-mcp me            계정/크레딧 확인
  *   gwanggo-mcp models        모델 목록
@@ -69,6 +70,11 @@ async function cmdGenerate(rest: string[]): Promise<void> {
 async function main(): Promise<void> {
   const [cmd, ...rest] = process.argv.slice(2)
   try {
+    if (cmd === 'auth' && rest[0] === 'login') {
+      await cmdLogin()
+      return
+    }
+
     switch (cmd) {
       case undefined:
       case 'serve':
@@ -106,6 +112,7 @@ async function main(): Promise<void> {
 
   (없음)/serve   MCP 서버 실행 (stdio)
   login          브라우저 승인으로 API 키 연결
+  auth login     브라우저 승인으로 API 키 연결 (gwanggo alias)
   logout         저장된 키 삭제
   me             계정/크레딧 확인
   models         모델 목록
