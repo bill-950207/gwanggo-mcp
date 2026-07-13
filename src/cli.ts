@@ -28,6 +28,25 @@ function arg(flags: string[], name: string): string | undefined {
   return eq?.split('=').slice(1).join('=')
 }
 
+function booleanArg(flags: string[], name: string): boolean | undefined {
+  if (flags.includes(`--no-${name}`)) return false
+
+  const inline = flags.find((f) => f.startsWith(`--${name}=`))
+  if (inline) {
+    const value = inline.split('=').slice(1).join('=').toLowerCase()
+    if (value === 'true' || value === '1') return true
+    if (value === 'false' || value === '0') return false
+    throw new GwanggoError(400, `--${name} must be true or false`)
+  }
+
+  const index = flags.indexOf(`--${name}`)
+  if (index < 0) return undefined
+  const value = flags[index + 1]?.toLowerCase()
+  if (value === 'true' || value === '1') return true
+  if (value === 'false' || value === '0') return false
+  return true
+}
+
 async function cmdLogin(): Promise<void> {
   const dc = await startDeviceFlow()
   console.log(`\n브라우저에서 gwanggo CLI 연결을 승인해주세요:`)
@@ -47,7 +66,7 @@ async function cmdGenerate(rest: string[]): Promise<void> {
   const prompt = positional.join(' ')
   const model = arg(rest, 'model') || (kind === 'video' ? 'seedance-2.0' : 'gpt-image-2')
   if (!prompt) {
-    console.error(`사용법: gwanggo-mcp generate [image|video] "프롬프트" --model <slug> [--image-url u] [--aspect-ratio r] [--resolution r] [--duration n] [--quality q]`)
+    console.error(`사용법: gwanggo generate [image|video] "프롬프트" --model <slug> [--image-url u] [--aspect-ratio r] [--resolution r] [--duration n] [--quality q] [--generate-audio]`)
     process.exit(1)
   }
   const body: Record<string, unknown> = { model, prompt }
@@ -56,6 +75,7 @@ async function cmdGenerate(rest: string[]): Promise<void> {
   const resolution = arg(rest, 'resolution'); if (resolution) body.resolution = resolution
   const duration = arg(rest, 'duration'); if (duration) body.duration = Number(duration)
   const quality = arg(rest, 'quality'); if (quality) body.quality = quality
+  const generateAudio = booleanArg(rest, 'generate-audio'); if (generateAudio !== undefined) body.generateAudio = generateAudio
 
   const sub = await generate(kind, body)
   console.log(`제출됨 (${sub.credits_used} credits) — id ${sub.id}`)
@@ -65,7 +85,7 @@ async function cmdGenerate(rest: string[]): Promise<void> {
   process.stderr.write('\n')
   if (task.status === 'COMPLETED') console.log(task.result_url)
   else if (task.status === 'FAILED') { console.error(`실패: ${task.error || 'unknown'} (크레딧 자동 환불)`); process.exit(1) }
-  else console.log(`아직 ${task.status} — gwanggo-mcp task ${sub.id} 로 확인하세요`)
+  else console.log(`아직 ${task.status} — gwanggo task ${sub.id} 로 확인하세요`)
 }
 
 async function main(): Promise<void> {
@@ -117,7 +137,7 @@ async function main(): Promise<void> {
   logout         저장된 키 삭제
   me             계정/크레딧 확인
   models         모델 목록
-  generate       이미지/영상 생성  예) gwanggo-mcp generate video "파도 위 서핑" --model seedance-2.0 --resolution 720p --duration 5
+  generate       이미지/영상 생성  예) gwanggo generate video "파도 위 서핑" --model seedance-2.0 --resolution 720p --duration 5 --generate-audio
   task <id>      생성 상태 확인
 
 키 우선순위: GWANGGO_API_KEY 환경변수 > ~/.config/gwanggo/config.json

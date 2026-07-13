@@ -78,12 +78,17 @@ Failed generations are **auto-refunded** server-side.
 The same binary doubles as a CLI:
 
 ```bash
-npx gwanggo-mcp models
-npx gwanggo-mcp generate image "neon alley cat, cinematic" --model gpt-image-2 --quality high
-npx gwanggo-mcp generate video "waves crashing at dawn" --model seedance-2.0 --resolution 720p --duration 5
-npx gwanggo-mcp me          # credits
-npx gwanggo-mcp task <id>   # check status
+gwanggo auth login
+gwanggo models
+gwanggo generate image "neon alley cat, cinematic" --model gpt-image-2 --quality high
+gwanggo generate video "waves crashing at dawn" --model seedance-2.0 --resolution 720p --duration 5 --generate-audio
+gwanggo me          # account and credits
+gwanggo task <id>   # check status
 ```
+
+The `gwanggo` commands reuse the account saved by `gwanggo auth login`; no API-key
+environment variable is required. `GWANGGO_API_KEY` remains available for CI and
+other non-interactive environments.
 
 ## How it works
 
