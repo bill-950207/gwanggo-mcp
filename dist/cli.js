@@ -13,7 +13,7 @@
  */
 import { spawn } from 'node:child_process';
 import { API_URL, saveKey, clearKey, getKey } from './config.js';
-import { generate, getTask, listModels, me, pollDeviceToken, pollTask, startDeviceFlow } from './api.js';
+import { generate, getTask, listModels, me, pollDeviceToken, pollTask, startDeviceFlow, GwanggoError } from './api.js';
 import { serve } from './mcp.js';
 function openBrowser(url) {
     const cmd = process.platform === 'darwin' ? 'open' : process.platform === 'win32' ? 'start' : 'xdg-open';
@@ -25,6 +25,28 @@ function arg(flags, name) {
         return flags[i + 1];
     const eq = flags.find((f) => f.startsWith(`--${name}=`));
     return eq?.split('=').slice(1).join('=');
+}
+function booleanArg(flags, name) {
+    if (flags.includes(`--no-${name}`))
+        return false;
+    const inline = flags.find((f) => f.startsWith(`--${name}=`));
+    if (inline) {
+        const value = inline.split('=').slice(1).join('=').toLowerCase();
+        if (value === 'true' || value === '1')
+            return true;
+        if (value === 'false' || value === '0')
+            return false;
+        throw new GwanggoError(400, `--${name} must be true or false`);
+    }
+    const index = flags.indexOf(`--${name}`);
+    if (index < 0)
+        return undefined;
+    const value = flags[index + 1]?.toLowerCase();
+    if (value === 'true' || value === '1')
+        return true;
+    if (value === 'false' || value === '0')
+        return false;
+    return true;
 }
 async function cmdLogin() {
     const dc = await startDeviceFlow();
@@ -44,7 +66,7 @@ async function cmdGenerate(rest) {
     const prompt = positional.join(' ');
     const model = arg(rest, 'model') || (kind === 'video' ? 'seedance-2.0' : 'gpt-image-2');
     if (!prompt) {
-        console.error(`사용법: gwanggo-mcp generate [image|video] "프롬프트" --model <slug> [--image-url u] [--aspect-ratio r] [--resolution r] [--duration n] [--quality q]`);
+        console.error(`사용법: gwanggo generate [image|video] "프롬프트" --model <slug> [--image-url u] [--aspect-ratio r] [--resolution r] [--duration n] [--quality q] [--generate-audio]`);
         process.exit(1);
     }
     const body = { model, prompt };
@@ -63,6 +85,9 @@ async function cmdGenerate(rest) {
     const quality = arg(rest, 'quality');
     if (quality)
         body.quality = quality;
+    const generateAudio = booleanArg(rest, 'generate-audio');
+    if (generateAudio !== undefined)
+        body.generateAudio = generateAudio;
     const sub = await generate(kind, body);
     console.log(`제출됨 (${sub.credits_used} credits) — id ${sub.id}`);
     const task = await pollTask(sub.id, kind === 'video' ? 10 * 60_000 : 5 * 60_000, (t) => process.stderr.write(`\r상태: ${t.status}   `));
@@ -74,7 +99,7 @@ async function cmdGenerate(rest) {
         process.exit(1);
     }
     else
-        console.log(`아직 ${task.status} — gwanggo-mcp task ${sub.id} 로 확인하세요`);
+        console.log(`아직 ${task.status} — gwanggo task ${sub.id} 로 확인하세요`);
 }
 async function main() {
     const [cmd, ...rest] = process.argv.slice(2);
@@ -127,7 +152,7 @@ async function main() {
   logout         저장된 키 삭제
   me             계정/크레딧 확인
   models         모델 목록
-  generate       이미지/영상 생성  예) gwanggo-mcp generate video "파도 위 서핑" --model seedance-2.0 --resolution 720p --duration 5
+  generate       이미지/영상 생성  예) gwanggo generate video "파도 위 서핑" --model seedance-2.0 --resolution 720p --duration 5 --generate-audio
   task <id>      생성 상태 확인
 
 키 우선순위: GWANGGO_API_KEY 환경변수 > ~/.config/gwanggo/config.json
