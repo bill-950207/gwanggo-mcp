@@ -4,7 +4,7 @@
 
 ### Give your AI agent the power to generate images & video.
 
-**MCP server + CLI for the [Gwanggo](https://gwanggo.jocoding.io?utm_source=github&utm_medium=mcp-readme) API — Seedream, Sora, Veo, Kling, GPT Image and 30+ more models behind one key.**
+**MCP server + CLI for the [Gwanggo](https://gwanggo.ai?utm_source=github&utm_medium=mcp-readme) API — Seedream, Sora, Veo, Kling, GPT Image and 30+ more models behind one key.**
 
 [![npm](https://img.shields.io/npm/v/gwanggo-mcp?color=cb3837&logo=npm)](https://www.npmjs.com/package/gwanggo-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-111111.svg)](./LICENSE)
@@ -31,7 +31,7 @@ npx gwanggo-mcp login
 gwanggo auth login
 ```
 
-> New accounts get free credits: sign up at [gwanggo.jocoding.io](https://gwanggo.jocoding.io?utm_source=github&utm_medium=mcp-readme). You can also skip `login` and set `GWANGGO_API_KEY` (create one at **Dashboard → API keys**).
+> New accounts get free credits: sign up at [gwanggo.ai](https://gwanggo.ai?utm_source=github&utm_medium=mcp-readme). You can also skip `login` and set `GWANGGO_API_KEY` (create one at **Dashboard → API keys**).
 
 **2. Add to your agent:**
 

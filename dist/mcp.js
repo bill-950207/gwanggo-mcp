@@ -25,7 +25,7 @@ function toBody(model, prompt, opts) {
     return body;
 }
 export async function serve() {
-    const server = new McpServer({ name: 'gwanggo', version: '0.1.0' });
+    const server = new McpServer({ name: 'gwanggo', version: '0.1.1' });
     server.tool('list_models', 'List available AI image/video generation models with credit costs and per-model options (aspect ratios, resolutions, durations). Call this first to pick a model slug.', { type: z.enum(['image', 'video']).optional().describe('Filter by model type') }, async ({ type }) => {
         try {
             const { models } = await listModels();

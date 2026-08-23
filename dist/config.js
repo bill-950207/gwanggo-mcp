@@ -7,7 +7,7 @@ import { homedir } from 'node:os';
 import { join } from 'node:path';
 const CONFIG_DIR = join(homedir(), '.config', 'gwanggo');
 const CONFIG_PATH = join(CONFIG_DIR, 'config.json');
-export const API_URL = (process.env.GWANGGO_API_URL || 'https://gwanggo.jocoding.io').replace(/\/$/, '');
+export const API_URL = (process.env.GWANGGO_API_URL || 'https://gwanggo.ai').replace(/\/$/, '');
 export function getKey() {
     if (process.env.GWANGGO_API_KEY)
         return process.env.GWANGGO_API_KEY.trim();
