@@ -18,7 +18,7 @@ async function request<T>(path: string, init?: RequestInit & { auth?: boolean })
     if (!key) {
       throw new GwanggoError(
         401,
-        'No API key. Run `gwanggo-mcp login`, or set GWANGGO_API_KEY. Keys: https://gwanggo.jocoding.io/dashboard/api-keys'
+        'No API key. Run `gwanggo-mcp login`, or set GWANGGO_API_KEY. Keys: https://gwanggo.ai/dashboard/api-keys'
       )
     }
     headers['Authorization'] = `Bearer ${key}`

@@ -27,7 +27,7 @@ function toBody(model: string, prompt: string, opts: Record<string, unknown>): R
 }
 
 export async function serve(): Promise<void> {
-  const server = new McpServer({ name: 'gwanggo', version: '0.1.0' })
+  const server = new McpServer({ name: 'gwanggo', version: '0.1.1' })
 
   server.tool(
     'list_models',
