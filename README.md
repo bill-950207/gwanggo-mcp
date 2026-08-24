@@ -92,7 +92,7 @@ other non-interactive environments.
 
 ## How it works
 
-Thin client over the public [Gwanggo /v1 REST API](https://github.com/bill-950207/gwanggo-studio#-the-api-underneath) — the same API that powers the open-source [Gwanggo Studio](https://github.com/bill-950207/gwanggo-studio). Your key is stored at `~/.config/gwanggo/config.json` (0600) and sent only as a Bearer token.
+Thin client over the public [Gwanggo /v1 REST API](https://github.com/bill-950207/gwanggo-studio#-the-api-underneath) — the same API that powers the open-source [Gwanggo Studio](https://github.com/bill-950207/gwanggo-studio). Your key is stored at `~/.config/gwanggo/config.json` (0600) and sent only as a Bearer token. A browser-login key takes precedence over `GWANGGO_API_KEY`, so a stale environment key cannot override a newly approved login. In CI, where no login file exists, `GWANGGO_API_KEY` is used.
 
 ## License
 

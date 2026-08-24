@@ -140,7 +140,7 @@ async function main(): Promise<void> {
   generate       이미지/영상 생성  예) gwanggo generate video "파도 위 서핑" --model seedance-2.0 --resolution 720p --duration 5 --generate-audio
   task <id>      생성 상태 확인
 
-키 우선순위: GWANGGO_API_KEY 환경변수 > ~/.config/gwanggo/config.json
+키 우선순위: 브라우저 로그인 저장 키 > GWANGGO_API_KEY 환경변수
 API 키 발급: ${API_URL}/dashboard/api-keys`)
         return
       default:
